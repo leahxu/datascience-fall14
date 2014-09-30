@@ -199,7 +199,6 @@ ORDER BY year;
  1985 |           9 |              11
 (15 rows)
 
-
 =============================================================================================
 
 === 8
@@ -317,7 +316,9 @@ SELECT 60
 =============================================================================================
 
 === 11
-The WHERE filter is making LEFT OUTER JOIN act like an INNER JOIN. Need to change the WHERE to AND. 
+Need to put the filter in the ON clause by using AND. 
+
+LEFT OUTER JOIN merges the two databases and then all the rows from the outer table that do not match the inner table are added back in with NULL. The WHERE clause is only processed after the join and filters out all the NULLs. 
 
 SELECT c.name, COUNT(p.name)
 FROM countries c
