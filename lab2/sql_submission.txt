@@ -1,14 +1,6 @@
 SQL Assignment Submission
 
 === 1
-SELECT e.event_id, e.olympic_id, p.name, r.result 
-FROM events e, results r, players p 
-WHERE e.name = '110m Hurdles Men'
-	AND e.olympic_id like '%2000%' 
-	AND r.event_id = e.event_id 
-	AND r.player_id = p.player_id;
-
-# Done with explicit JOIN
 SELECT e.event_id, e.olympic_id, p.name, r.result
 FROM events e 
 	INNER JOIN results r
@@ -23,36 +15,37 @@ WHERE e.name = '110m Hurdles Men'
  E28      | SYD2000    | Mark Crear                               |  13.22
 =============================================================================================
 
-SELECT e.event_id, e.olympic_id, r.player_id, r.result 
-FROM events e, results r
-WHERE e.name = '110m Hurdles Men'
-	AND e.olympic_id like '%2000%' 
-	AND r.event_id = e.event_id;
-**************** RESULT ***************************************************************
- E28      | SYD2000    | GARCIANI01 |     13
- E28      | SYD2000    | TRAMMTER01 |  13.16
- E28      | SYD2000    | CREARMAR01 |  13.22
-=============================================================================================
-
 === 2
 SELECT COUNT(SUBSTR(players.name,1,1)) 
 FROM players 
 WHERE SUBSTR(players.name,1,1) 
 	IN ('A', 'E', 'I', 'O', 'U');
 **************** RESULT ***************************************************************
-84
+ count 
+-------
+    84
+(1 row)
 =============================================================================================
 
 === 3
-SELECT count(eventtype = 'points') 
-FROM events INNER JOIN olympics
-	ON events.olympic_id = olympics.olympic_id
-	AND olympics.year = 2000;
+SELECT DISTINCT COUNT(e.name)
+FROM events e INNER JOIN olympics o
+	ON e.olympic_id = o.olympic_id
+	WHERE e.result_noted_in = 'points'
+	AND o.year = 2000;
 **************** RESULT ***************************************************************
-78
+ count 
+-------
+     2
+(1 row)
 =============================================================================================
 
 === 4
+# For 2000 Olympics, find the 5 countries with the smallest values of ``number-of-medals/population''.
+# Question is ambiguous as to whether it wants the definitive number of medals or number of 
+# winnings per country. I went with the absolute number of medals per country 
+# (e.g. team of 4 winning goal will result in 4 medals)
+
 SELECT countries.name, CAST(COUNT(results.result) AS DECIMAL)/countries.population as num
 	FROM countries 
 		LEFT OUTER JOIN players
@@ -68,11 +61,14 @@ SELECT countries.name, CAST(COUNT(results.result) AS DECIMAL)/countries.populati
 	ORDER BY num ASC LIMIT 5; 
 
 **************** RESULT ***************************************************************
+                   name                   |              num               
+------------------------------------------+--------------------------------
  China                                    | 0.0000000007556728359796996049
  France                                   |     0.000000016530144205672021
  Mexico                                   |     0.000000018686454376087318
  Canada                                   |     0.000000029948960083756460
  Nigeria                                  |     0.000000038014227965242831
+(5 rows)
 =============================================================================================
 
 === 5 
@@ -83,6 +79,8 @@ SELECT countries.name, COUNT(players.player_id)
 	GROUP BY countries.name
 	ORDER BY countries.name ASC;
 **************** RESULT ***************************************************************
+                   name                   | count 
+------------------------------------------+-------
  Algeria                                  |     4
  Argentina                                |     1
  Australia                                |    34
@@ -141,62 +139,67 @@ SELECT countries.name, COUNT(players.player_id)
  United Kingdom                           |    12
  United States                            |    88
  Zimbabwe                                 |     1
+(58 rows)
 
 =============================================================================================
 
 === 6 
-SELECT name, country_id, birthdate FROM players 
+SELECT country_id, birthdate, name FROM players 
 WHERE RIGHT(name,1) = 'd'
 ORDER BY country_id ASC, birthdate DESC; 
 **************** RESULT ***************************************************************
- Abderrahmane Hammad                     
- Mark Ormrod                             
- Yunaika Crawford                        
- Lars Conrad                             
- Beverly McDonald                        
- Michael Blackwood                       
- Pieter van den Hoogenband               
- Trine Hattestad                         
- Darian Townsend                         
- BJ Bedford                              
- Amanda Beard                            
- Shawn Crawford                          
- Jon Drummond   
+ country_id | birthdate  |                   name                   
+------------+------------+------------------------------------------
+ ALG        | 1980-10-04 | Abderrahmane Hammad                     
+ AUS        | 1973-10-26 | Mark Ormrod                             
+ CUB        | 1981-12-09 | Yunaika Crawford                        
+ GER        | 1980-09-04 | Lars Conrad                             
+ JAM        | 1978-07-21 | Beverly McDonald                        
+ JAM        | 1977-08-05 | Michael Blackwood                       
+ NED        | 1974-07-06 | Pieter van den Hoogenband               
+ NOR        | 1972-02-04 | Trine Hattestad                         
+ RSA        | 1975-08-06 | Darian Townsend                         
+ USA        | 1981-04-08 | BJ Bedford                              
+ USA        | 1980-10-22 | Amanda Beard                            
+ USA        | 1978-11-20 | Shawn Crawford                          
+ USA        | 1972-01-13 | Jon Drummond                            
+(13 rows)
 =============================================================================================
 
 === 7 
-WITH temp1 AS (
-	SELECT player_id, count(medal) AS num_golds
-	FROM results
-	WHERE medal LIKE '%GOLD%'
-	GROUP BY player_id)
-SELECT EXTRACT(YEAR FROM birthdate) AS year, COUNT(players.player_id), SUM(temp1.num_golds) 
-FROM temp1, players 
-	INNER JOIN results  
-		ON players.player_id = results.player_id
-	INNER JOIN events 
-		ON events.event_id = results.event_id
-WHERE events.olympic_id like '%2004%'
-	AND temp1.player_id = players.player_id
-GROUP BY year                   
-ORDER BY year ASC; 
+
+WITH gold AS (SELECT player_id, COUNT(medal) AS num_golds 
+	FROM results INNER JOIN events ON events.event_id = results.event_id 
+	WHERE medal = 'GOLD' 
+	AND events.olympic_id like '%2004%' 
+	GROUP BY results.player_id)
+SELECT EXTRACT(YEAR FROM birthdate) AS year, COUNT(p.player_id) AS num_players, 
+	SUM(num_golds) AS num_gold_medals
+FROM players p INNER JOIN gold ON p.player_id = gold.player_id
+GROUP BY year
+ORDER BY year; 
 
 **************** RESULT ***************************************************************
- 1971 |    15 |  25
- 1972 |     4 |   4
- 1973 |    10 |  14
- 1974 |    14 |  25
- 1975 |    13 |  19
- 1976 |    24 |  79
- 1977 |     6 |   6
- 1978 |    25 |  56
- 1979 |     9 |   9
- 1980 |    21 |  28
- 1981 |     4 |  10
- 1982 |     2 |   2
- 1983 |     7 |   7
- 1984 |    10 |  13
- 1985 |    14 |  34
+ year | num_players | num_gold_medals 
+------+-------------+-----------------
+ 1971 |           9 |               9
+ 1972 |           3 |               3
+ 1973 |           5 |               5
+ 1974 |           9 |               9
+ 1975 |           9 |              11
+ 1976 |           9 |              17
+ 1977 |           4 |               4
+ 1978 |          10 |              15
+ 1979 |           7 |               7
+ 1980 |          10 |              12
+ 1981 |           1 |               2
+ 1982 |           2 |               2
+ 1983 |           2 |               2
+ 1984 |           7 |               7
+ 1985 |           9 |              11
+(15 rows)
+
+
 =============================================================================================
 
 === 8
@@ -208,11 +211,14 @@ GROUP BY events.event_id
 HAVING COUNT(results.medal) > 1;
 
 **************** RESULT ***************************************************************
- E108 
+ event_id 
+----------
+ E108   
+(1 row)
 =============================================================================================
 
 === 9
-SELECT events.event_id, silver.result - gold.result 
+SELECT events.event_id, silver.result - gold.result AS difference
 FROM events
 	INNER JOIN results silver 
 		ON events.event_id = silver.event_id
@@ -225,10 +231,13 @@ WHERE events.name LIKE '%Butterfly%'
 GROUP BY silver.result, gold.result, events.event_id;
 
 **************** RESULT ***************************************************************
+ event_id |     difference     
+----------+--------------------
  E43      |  0.519999999999996
  E13      | 0.0399999999999991
  E45      |  0.310000000000002
  E15      |               0.32
+(4 rows)
 =============================================================================================
 
 === 10
@@ -241,26 +250,70 @@ WHERE r.player_id = p.player_id
 
 **************** RESULT ***************************************************************
 SELECT 60
-
-Snapshot of results: 
-
-SELECT * FROM TeamMedals ORDER BY event_id LIMIT 15; 
-
- RUS        | E100     | BRONZE  | 203.46
- USA        | E100     | GOLD    | 202.62
- JAM        | E100     | SILVER  | 203.25
- USA        | E81      | BRONZE  | 194.62
+ country_id | event_id |  medal  | result 
+------------+----------+---------+--------
+ AUS        | E88      | SILVER  | 241.59
  NED        | E81      | SILVER  | 194.36
- RSA        | E81      | GOLD    | 193.17
- AUS        | E82      | GOLD    | 193.67
- BRA        | E82      | BRONZE  |  197.4
- USA        | E82      | SILVER  | 193.86
- USA        | E83      | SILVER  | 216.39
- NED        | E83      | BRONZE  | 217.59
- AUS        | E83      | GOLD    | 215.94
- SWE        | E84      | BRONZE  |  220.3
+ RUS        | E99      | SILVER  | 200.16
+ AUS        | E94      | GOLD    | 427.05
+ GER        | E85      | SILVER  | 213.62
+ USA        | E95      | GOLD    | 473.42
+ AUS        | E93      | SILVER  | 427.46
  NED        | E84      | SILVER  | 219.83
+ JAM        | E98      | BRONZE  | 178.78
+ JPN        | E85      | BRONZE  | 215.22
+ USA        | E90      | GOLD    |  37.61
+ USA        | E94      | SILVER  | 432.64
+ GER        | E86      | BRONZE  | 215.88
+ BRA        | E90      | SILVER  |   37.9
+ GER        | E95      | BRONZE  | 477.35
+ RSA        | E81      | GOLD    | 193.17
+ USA        | E88      | GOLD    |  238.3
+ USA        | E99      | GOLD    | 199.01
+ AUS        | E97      | SILVER  |  180.6
+ NGR        | E97      | BRONZE  |  180.9
+ USA        | E89      | SILVER  |  38.08
+ GER        | E87      | BRONZE  | 240.72
+ AUS        | E82      | GOLD    | 193.67
+ AUS        | E96      | SILVER  | 478.52
+ NGR        | E89      | BRONZE  |  38.23
+ JAM        | E92      | SILVER  |  42.13
+ JAM        | E99      | BRONZE  |    202
+ FRA        | E91      | BRONZE  |  42.54
+ CUB        | E90      | BRONZE  |  38.04
+ GBR        | E89      | GOLD    |  38.07
+ ITA        | E93      | BRONZE  | 431.83
+ BAH        | E92      | GOLD    |  41.95
+ CHN        | E95      | SILVER  | 475.97
+ JPN        | E88      | BRONZE  | 244.16
+ NGR        | E98      | SILVER  | 178.68
+ RUS        | E91      | SILVER  |  42.27
+ USA        | E87      | SILVER  | 239.12
+ USA        | E86      | GOLD    | 213.73
+ AUS        | E86      | SILVER  | 215.27
+ RUS        | E100     | BRONZE  | 203.46
+ SWE        | E84      | BRONZE  |  220.3
+ USA        | E82      | SILVER  | 193.86
+ JAM        | E100     | SILVER  | 203.25
  USA        | E84      | GOLD    | 216.61
+ AUS        | E87      | GOLD    | 237.32
+ USA        | E93      | GOLD    | 427.33
+ USA        | E97      | GOLD    | 175.91
+ BRA        | E82      | BRONZE  |  197.4
+ USA        | E96      | GOLD    |  477.8
+ USA        | E83      | SILVER  | 216.39
+ GER        | E96      | BRONZE  | 478.64
+ USA        | E100     | GOLD    | 202.62
+ JAM        | E91      | GOLD    |  41.73
+ NED        | E83      | BRONZE  | 217.59
+ USA        | E85      | GOLD    | 210.68
+ NED        | E94      | BRONZE  |  432.7
+ AUS        | E83      | GOLD    | 215.94
+ USA        | E92      | BRONZE  |   42.2
+ USA        | E81      | BRONZE  | 194.62
+ USA        | E98      | GOLD    | 176.35
+(60 rows)
+
 =============================================================================================
 
 === 11
