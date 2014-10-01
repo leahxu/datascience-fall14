@@ -1,6 +1,8 @@
 SQL Assignment Submission
 
 === 1
+Write a query to find the three medalists and their winning times for ``110m Hurdles Men'' at 2000 Olympics.
+
 SELECT e.event_id, e.olympic_id, p.name, r.result
 FROM events e 
 	INNER JOIN results r
@@ -16,6 +18,8 @@ WHERE e.name = '110m Hurdles Men'
 =============================================================================================
 
 === 2
+Count the total number of players whose names start with a vowel ('A', 'E', 'I', 'O', 'U'). (Hint: Use "in" and "substr").
+
 SELECT COUNT(SUBSTR(players.name,1,1)) 
 FROM players 
 WHERE SUBSTR(players.name,1,1) 
@@ -28,6 +32,8 @@ WHERE SUBSTR(players.name,1,1)
 =============================================================================================
 
 === 3
+For how many events at the 2000 Olympics, the result of the event is noted in 'points'?
+
 SELECT DISTINCT COUNT(e.name)
 FROM events e INNER JOIN olympics o
 	ON e.olympic_id = o.olympic_id
@@ -41,10 +47,12 @@ FROM events e INNER JOIN olympics o
 =============================================================================================
 
 === 4
-# For 2000 Olympics, find the 5 countries with the smallest values of ``number-of-medals/population''.
-# Question is ambiguous as to whether it wants the definitive number of medals or number of 
-# winnings per country. I went with the absolute number of medals per country 
-# (e.g. team of 4 winning goal will result in 4 medals)
+For 2000 Olympics, find the 5 countries with the smallest values of ``number-of-medals/population''.
+
+For 2000 Olympics, find the 5 countries with the smallest values of ``number-of-medals/population''.
+Question is ambiguous as to whether it wants the definitive number of medals or number of 
+winnings per country. I went with the absolute number of medals per country 
+(e.g. team of 4 winning goal will result in 4 medals)
 
 SELECT countries.name, CAST(COUNT(results.result) AS DECIMAL)/countries.population as num
 	FROM countries 
@@ -72,6 +80,8 @@ SELECT countries.name, CAST(COUNT(results.result) AS DECIMAL)/countries.populati
 =============================================================================================
 
 === 5 
+Write a query to find the number of players per country. The output should be a table with two attributes: country_name, num_players.
+
 SELECT countries.name, COUNT(players.player_id)
 	FROM countries
 		LEFT OUTER JOIN players
@@ -144,6 +154,8 @@ SELECT countries.name, COUNT(players.player_id)
 =============================================================================================
 
 === 6 
+Write a query to list all players whose names end in 'd', sorted first by their Country ID in ascending order, and second by their Birthdate in descending order.
+
 SELECT country_id, birthdate, name FROM players 
 WHERE RIGHT(name,1) = 'd'
 ORDER BY country_id ASC, birthdate DESC; 
@@ -167,41 +179,42 @@ ORDER BY country_id ASC, birthdate DESC;
 =============================================================================================
 
 === 7 
+For 2004 Olympics, generate a list - (birthyear, num-players, num-gold-medals) - containing the years in which the players were born, the number of players born in each year, and the number of gold medals won by the players born in each year.
 
-WITH gold AS (SELECT player_id, COUNT(medal) AS num_golds 
-	FROM results INNER JOIN events ON events.event_id = results.event_id 
-	WHERE medal = 'GOLD' 
-	AND events.olympic_id like '%2004%' 
-	GROUP BY results.player_id)
-SELECT EXTRACT(YEAR FROM birthdate) AS year, COUNT(p.player_id) AS num_players, 
-	SUM(num_golds) AS num_gold_medals
-FROM players p INNER JOIN gold ON p.player_id = gold.player_id
-GROUP BY year
-ORDER BY year; 
+SELECT EXTRACT(YEAR FROM birthdate) AS birthyear,
+COUNT(distinct p.player_id) AS num_players,
+SUM(case WHEN ( r.medal = 'GOLD') THEN 1 ELSE 0 END ) AS num_gold_medals
+FROM players p, results r, events e 
+WHERE (p.player_id = r.player_id 
+	AND r.event_id = e.event_id 
+	AND e.olympic_id like '%2004%')
+GROUP BY birthyear;
 
 **************** RESULT ***************************************************************
- year | num_players | num_gold_medals 
-------+-------------+-----------------
- 1971 |           9 |               9
- 1972 |           3 |               3
- 1973 |           5 |               5
- 1974 |           9 |               9
- 1975 |           9 |              11
- 1976 |           9 |              17
- 1977 |           4 |               4
- 1978 |          10 |              15
- 1979 |           7 |               7
- 1980 |          10 |              12
- 1981 |           1 |               2
- 1982 |           2 |               2
- 1983 |           2 |               2
- 1984 |           7 |               7
- 1985 |           9 |              11
+ birthyear | num_players | num_gold_medals 
+-----------+-------------+-----------------
+      1971 |          26 |               9
+      1972 |          15 |               3
+      1973 |          14 |               5
+      1974 |          22 |               9
+      1975 |          17 |              11
+      1976 |          12 |              17
+      1977 |          15 |               4
+      1978 |          29 |              15
+      1979 |          18 |               7
+      1980 |          18 |              12
+      1981 |          11 |               2
+      1982 |           8 |               2
+      1983 |          13 |               2
+      1984 |          17 |               7
+      1985 |          21 |              11
 (15 rows)
 
 =============================================================================================
 
 === 8
+Report all individual events where there was a tie in the score, and two or more players got awarded a Gold medal. The 'Events' table contains information about whether an event is individual or not (Hint: Use group by and having).
+
 SELECT events.event_id 
 FROM events INNER JOIN results 
 	ON events.event_id = results.event_id
@@ -217,6 +230,8 @@ HAVING COUNT(results.medal) > 1;
 =============================================================================================
 
 === 9
+Write a query to find the absolute differences between the gold medal and silver medal winners for all Butterfly events (Men and Women) at the Athens Olympics. The output should be: event_id, difference, where difference = time taken by silver medalist - time taken by gold medalist
+
 SELECT events.event_id, silver.result - gold.result AS difference
 FROM events
 	INNER JOIN results silver 
@@ -240,6 +255,12 @@ GROUP BY silver.result, gold.result, events.event_id;
 =============================================================================================
 
 === 10
+To complement the IndividualMedals table we created above, create a team medals table, with schema:
+
+TeamMedals(country_id, event_id, medal, result)
+
+The TeamMedals table should only contain one entry for each country for each team event. Fortunately for us, two teams from the same country can't compete in a team event. The information about whether an event is a team event is stored in the events table.
+
 CREATE TABLE TeamMedals AS
 SELECT DISTINCT p.country_id, r.event_id, r.medal, r.result
 FROM players p, results r, events e
@@ -316,6 +337,8 @@ SELECT 60
 =============================================================================================
 
 === 11
+Say we want to find the number of players in each country born in 1975. The following query works, but doesn't list countries with 0 players born in 1975 (we would like those countries in the output with 0 as the second column). Confirm that replacing inner join with left outer join doesn't work. How would you fix the query (while still using left outer join)?
+
 Need to put the filter in the ON clause by using AND. 
 
 LEFT OUTER JOIN merges the two databases and then all the rows from the outer table that do not match the inner table are added back in with NULL. The WHERE clause is only processed after the join and filters out all the NULLs. 
