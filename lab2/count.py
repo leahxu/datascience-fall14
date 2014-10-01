@@ -1,3 +1,8 @@
+'''
+Author: Leah Xu
+Lab2: Part III
+'''
+
 import pandas as pd
 import numpy as np
 import avro.schema
@@ -18,3 +23,6 @@ countries = pd.concat(temp)
 pop_ten_million = countries[countries.population > 10000000].name.count()
 
 print "Number of countries with population over ten million:", pop_ten_million
+
+# Output
+# Number of countries with population over ten million: 36
