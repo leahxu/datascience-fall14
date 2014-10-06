@@ -1,25 +1,211 @@
 SQL Assignment Submission
 
 === 1
-<INSERT YOUR QUERY HERE>
+Create a view that contains the total number of medals per country, with schema: NumberOfMedals(country_name, number_of_medals)
+
+CREATE VIEW NumberOfMedals AS 
+	SELECT c.name AS country_name, COUNT(r.medal) AS number_of_medals
+	FROM countries c
+	INNER JOIN players p ON c.country_id = p.country_id 
+	INNER JOIN results r ON p.player_id = r.player_id
+	GROUP BY country_name; 
 **************** RESULT ***************************************************************
-<INSERT YOUR RESULT HERE>
+CREATE VIEW
+
+             List of relations
+ Schema |       Name       | Type  | Owner  
+--------+------------------+-------+--------
+ public | countries        | table | leahxu
+ public | events           | table | leahxu
+ public | individualmedals | table | leahxu
+ public | numberofmedals   | view  | leahxu
+ public | olympics         | table | leahxu
+ public | players          | table | leahxu
+ public | results          | table | leahxu
+ public | teammedals       | table | leahxu
+(8 rows)
+
+SELECT * FROM NumberOfMedals;
+
+               country_name               | number_of_medals 
+------------------------------------------+------------------
+ Costa Rica                               |                2
+ Latvia                                   |                2
+ Estonia                                  |                2
+ Eritrea                                  |                1
+ Turkey                                   |                1
+ Germany                                  |               30
+ France                                   |               12
+ Algeria                                  |                4
+ Slovenia                                 |                1
+ Japan                                    |               21
+ Jamaica                                  |               29
+ Spain                                    |                4
+ Ukraine                                  |               13
+ Belarus                                  |                8
+ Cameroon                                 |                1
+ Zimbabwe                                 |                3
+ Saudi Arabia                             |                1
+ Ireland                                  |                1
+ Denmark                                  |                3
+ Russia                                   |               45
+ Lithuania                                |                3
+ Iceland                                  |                1
+ Portugal                                 |                3
+ Netherlands                              |               27
+ Barbados                                 |                1
+ Nigeria                                  |               13
+ Romania                                  |               13
+ The Bahamas                              |                7
+ Dominican Republic                       |                1
+ Trinidad and Tobago                      |                3
+ Canada                                   |                1
+ Austria                                  |                3
+ China                                    |                8
+ Kenya                                    |               14
+ South Africa                             |               13
+ Australia                                |               76
+ United States                            |              171
+ Poland                                   |                9
+ Slovakia                                 |                2
+ Argentina                                |                1
+ United Kingdom                           |               15
+ Kazakhstan                               |                2
+ Croatia                                  |                1
+ Czech Republic                           |                4
+ Cuba                                     |               14
+ Italy                                    |               16
+ Sweden                                   |               11
+ Ethiopia                                 |               15
+ Greece                                   |                9
+ Brazil                                   |                9
+ Morocco                                  |                7
+ Hungary                                  |                4
+ Mozambique                               |                1
+ Mexico                                   |                3
+ Finland                                  |                1
+ Sri Lanka                                |                1
+ Norway                                   |                3
+ Bulgaria                                 |                1
+(58 rows)
 =============================================================================================
 
 === 2
-<INSERT YOUR QUERY HERE>
+(a) Write a query to join the two tables described above (R and S) on C, such that if a tuple from R and a tuple from S both have attribute C set to NULL, then they are joined together. So the result will contain (a3, 30, 30, d1) and (a4, 0, NULL, d2). 
+
+SELECT r.a, r.b, r.c, s.d FROM r INNER JOIN s ON COALESCE(r.c, -1) = COALESCE(s.c, -1); 
+
+(b) Write a query to instead get such tuples padded with NULL, i.e., the output should contain, in addition to the inner join result, (a4, 0, NULL, NULL) and (NULL, NULL, NULL, d2).
+
+SELECT r.a, r.b, r.c, s.d FROM r FULL OUTER JOIN s ON r.c = s.c;
+
 **************** RESULT ***************************************************************
-<INSERT YOUR RESULT HERE>
+a)
+     a      | b  | c  |     d      
+------------+----+----+------------
+ a4         |  0 |    | d2        
+ a3         | 30 | 30 | d1        
+(2 rows)
+
+b)
+     a      | b  | c  |     d      
+------------+----+----+------------
+ a1         | 15 | 15 | 
+ a2         | 20 | 20 | 
+ a3         | 30 | 30 | d1        
+ a4         |  0 |    | 
+            |    |    | d2        
+(5 rows)
+
 =============================================================================================
 
 === 3
-<INSERT YOUR QUERY HERE>
-**************** RESULT ***************************************************************
-<INSERT YOUR RESULT HERE>
-=============================================================================================
+Write a "trigger" to keep the TeamMedals table updated when a new entry is added to the Results table (don't do anything if the new entry refers to an individual event). Database systems tend to be very picky about the trigger syntax, so be careful.
 
-=== 4
-<INSERT YOUR QUERY HERE>
+**************** RESULT ***************************************************************
+
+CREATE OR REPLACE FUNCTION update_team_medals() 
+RETURNS TRIGGER AS $_$
+BEGIN
+    IF EXISTS (SELECT * FROM events WHERE is_team_event = 1) THEN
+    INSERT INTO TeamMedals (country_id, event_id, medal, result)
+    SELECT p.country_id, r.event_id, r.medal, r.result
+    FROM players p, results r, events e
+	WHERE r.player_id = p.player_id 
+	AND r.event_id = e.event_id
+	AND e.is_team_event = 1;
+END IF; 
+RETURN null;
+END; $_$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION update_team_medals() 
+RETURNS TRIGGER AS $_$
+BEGIN
+	WITH team AS (SELECT p.country_id, r.event_id, r.medal, r.result, e.is_team_event
+    FROM players p, results r, events e
+	WHERE r.player_id = p.player_id 
+	AND r.event_id = e.event_id
+	AND e.is_team_event = 1)
+    IF (team.is_team_event = 1) THEN
+    INSERT INTO TeamMedals (country_id, event_id, medal, result)
+    team.country_id, team.event_id, team.medal, team.result;
+END IF; 
+RETURN null;
+END; $_$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER updateTeamMedals 
+	AFTER INSERT ON results
+	FOR EACH ROW
+	EXECUTE PROCEDURE update_team_medals(); 
+=============================================================================================
+CREATE FUNCTION
+CREATE TRIGGER
+=== 4. 
+Write a PL/pgSQL procedure to create a list of all "gold medalists" from USA in ATH2004 olympics, output in XML format as follows:
+      <medal>
+          <event>Event1</event>      
+          <player>Player1</player>  
+      </medal>
+      <medal>
+          <event>Event2</event>      
+          <players>
+              <player>Player2</player>
+              <player>Player3</player>
+              <player>Player4</player>
+          </players>
+      </medal>
+      ...
+
+SELECT e.name, p.name, r.medal FROM players p 
+INNER JOIN results r ON p.player_id = r.player_id 
+INNER JOIN events e ON r.event_id = e.event_id 
+WHERE (e.olympic_id like '%2004%' AND r.medal = 'GOLD' AND p.country_id = 'USA')
+GROUP BY e.name, p.name, r.medal 
+ORDER BY e.name ASC;
+
+CREATE OR REPLACE FUNCTION to_xml()
+  RETURNS text AS
+$$
+DECLARE
+    result text := '';
+    searchsql text := '';
+    var_match text := '';
+BEGIN
+    searchsql := 'SELECT n || '' down'' As countdown 
+                FROM generate_series(' || CAST(param_numcount As text) || ', 1, -1) As n ';
+
+    FOR var_match IN EXECUTE(searchsql) LOOP
+        IF result > '' THEN
+            result := result || ';' || var_match;
+        ELSE
+            result := var_match;
+        END IF;
+    END LOOP;
+    RETURN result;
+END;
+$$
+LANGUAGE 'plpgsql' IMMUTABLE;
+
 **************** RESULT ***************************************************************
 <INSERT YOUR RESULT HERE>
 =============================================================================================
