@@ -97,7 +97,7 @@ SELECT r.a, r.b, r.c, s.d FROM r INNER JOIN s ON COALESCE(r.c, -1) = COALESCE(s.
 
 (b) Write a query to instead get such tuples padded with NULL, i.e., the output should contain, in addition to the inner join result, (a4, 0, NULL, NULL) and (NULL, NULL, NULL, d2).
 
-SELECT r.a, r.b, r.c, s.d FROM r FULL OUTER JOIN s ON r.c = s.c;
+SELECT r.a, r.b, r.c, s.d FROM r FULL OUTER JOIN s ON r.c = s.c WHERE s.d IS NULL;
 
 **************** RESULT ***************************************************************
 a)
@@ -108,14 +108,12 @@ a)
 (2 rows)
 
 b)
-     a      | b  | c  |     d      
-------------+----+----+------------
+     a      | b  | c  | d 
+------------+----+----+---
  a1         | 15 | 15 | 
  a2         | 20 | 20 | 
- a3         | 30 | 30 | d1        
  a4         |  0 |    | 
-            |    |    | d2        
-(5 rows)
+(3 rows)
 
 =============================================================================================
 
