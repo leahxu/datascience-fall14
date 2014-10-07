@@ -4,11 +4,11 @@ SQL Assignment Submission
 Create a view that contains the total number of medals per country, with schema: NumberOfMedals(country_name, number_of_medals)
 
 CREATE VIEW NumberOfMedals AS 
-	SELECT c.name AS country_name, COUNT(r.medal) AS number_of_medals
-	FROM countries c
-	INNER JOIN players p ON c.country_id = p.country_id 
-	INNER JOIN results r ON p.player_id = r.player_id
-	GROUP BY country_name; 
+    SELECT c.name AS country_name, COUNT(r.medal) AS number_of_medals
+    FROM countries c
+    INNER JOIN players p ON c.country_id = p.country_id 
+    INNER JOIN results r ON p.player_id = r.player_id
+    GROUP BY country_name; 
 **************** RESULT ***************************************************************
 CREATE VIEW
 
@@ -123,41 +123,49 @@ Write a "trigger" to keep the TeamMedals table updated when a new entry is added
 **************** RESULT ***************************************************************
 
 CREATE OR REPLACE FUNCTION update_team_medals() 
-RETURNS TRIGGER AS $_$
+RETURNS TRIGGER AS $updateTeamMedals$
+DECLARE
+    teamEvent integer;
+    countryId text;
 BEGIN
-    IF EXISTS (SELECT * FROM events WHERE is_team_event = 1) THEN
-    INSERT INTO TeamMedals (country_id, event_id, medal, result)
-    SELECT p.country_id, r.event_id, r.medal, r.result
-    FROM players p, results r, events e
-	WHERE r.player_id = p.player_id 
-	AND r.event_id = e.event_id
-	AND e.is_team_event = 1;
-END IF; 
-RETURN null;
-END; $_$ LANGUAGE 'plpgsql';
-
-CREATE OR REPLACE FUNCTION update_team_medals() 
-RETURNS TRIGGER AS $_$
-BEGIN
-	WITH team AS (SELECT p.country_id, r.event_id, r.medal, r.result, e.is_team_event
-    FROM players p, results r, events e
-	WHERE r.player_id = p.player_id 
-	AND r.event_id = e.event_id
-	AND e.is_team_event = 1)
-    IF (team.is_team_event = 1) THEN
-    INSERT INTO TeamMedals (country_id, event_id, medal, result)
-    team.country_id, team.event_id, team.medal, team.result;
-END IF; 
-RETURN null;
-END; $_$ LANGUAGE 'plpgsql';
+    SELECT is_team_event INTO teamEvent FROM events WHERE events.event_id = NEW.event_id;
+    SELECT country_id INTO countryId FROM players WHERE players.player_id = NEW.player_id;
+    IF (teamEvent = 1) THEN
+        INSERT INTO TeamMedals VALUES(countryId, NEW.event_id, NEW.medal, NEW.result);
+    END If;
+RETURN NEW;
+END; $updateTeamMedals$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER updateTeamMedals 
-	AFTER INSERT ON results
-	FOR EACH ROW
-	EXECUTE PROCEDURE update_team_medals(); 
+    AFTER INSERT ON results
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_team_medals(); 
+
 =============================================================================================
 CREATE FUNCTION
 CREATE TRIGGER
+
+Team Event: causes result to be inserted into TeamMedals
+
+INSERT INTO events VALUES('E999', 'TEST TEAM', 'TEST', 'ATH2004', '1', '4');
+INSERT INTO results VALUES('E999', 'EGBELAAR01', 'GOLD', '999');
+
+SELECT * FROM TeamMedals WHERE event_id = 'E999';
+ country_id | event_id |  medal  | result 
+------------+----------+---------+--------
+ NGR        | E999     | GOLD    |    999
+(1 row)
+
+Individual Event: does not cause result to be inserted into TeamMedals
+
+INSERT INTO events VALUES('E9999', 'TEST TEAM', 'TEST', 'ATH2004', '0', '1');
+INSERT INTO results VALUES('E9999', 'EGBELAAR01', 'GOLD', '999');
+
+SELECT * FROM TeamMedals WHERE event_id = 'E9999';
+ country_id | event_id | medal | result 
+------------+----------+-------+--------
+(0 rows)
+
 === 4. 
 Write a PL/pgSQL procedure to create a list of all "gold medalists" from USA in ATH2004 olympics, output in XML format as follows:
       <medal>
@@ -174,37 +182,189 @@ Write a PL/pgSQL procedure to create a list of all "gold medalists" from USA in 
       </medal>
       ...
 
-SELECT e.name, p.name, r.medal FROM players p 
-INNER JOIN results r ON p.player_id = r.player_id 
-INNER JOIN events e ON r.event_id = e.event_id 
-WHERE (e.olympic_id like '%2004%' AND r.medal = 'GOLD' AND p.country_id = 'USA')
-GROUP BY e.name, p.name, r.medal 
-ORDER BY e.name ASC;
-
+XML Representation Function: 
 CREATE OR REPLACE FUNCTION to_xml()
-  RETURNS text AS
-$$
+    RETURNS text AS $toXML$
 DECLARE
     result text := '';
-    searchsql text := '';
-    var_match text := '';
+    prev_name text := ''; 
+    curr_record record;
+    tag integer := 1;
+    num_players integer;
 BEGIN
-    searchsql := 'SELECT n || '' down'' As countdown 
-                FROM generate_series(' || CAST(param_numcount As text) || ', 1, -1) As n ';
+    FOR curr_record IN (
+       WITH temp AS (
+                SELECT e.event_id, name, medal, player_id
+                FROM (SELECT * FROM events WHERE olympic_id = 'ATH2004') e
+                INNER JOIN (SELECT * FROM results WHERE medal = 'GOLD') r ON e.event_id = r.event_id
+            ), num_players AS (
+                SELECT e.event_id, COUNT(p.player_id) AS num
+                FROM events e
+                INNER JOIN results r ON e.event_id = r.event_id
+                INNER JOIN players p ON r.player_id = p.player_id
+                WHERE e.olympic_id = 'ATH2004' AND r.medal = 'GOLD' AND p.country_id = 'USA'
+                GROUP BY e.event_id
+            )
+        SELECT temp.name AS event_name, p.name AS player_name, n.num AS num_players
+        FROM temp INNER JOIN players p ON p.player_id = temp.player_id
+                  INNER JOIN num_players n ON n.event_id = temp.event_id
+        WHERE country_id = 'USA'
+        ORDER BY temp.name
+        )
+    LOOP
+        num_players := curr_record.num_players; 
 
-    FOR var_match IN EXECUTE(searchsql) LOOP
-        IF result > '' THEN
-            result := result || ';' || var_match;
-        ELSE
-            result := var_match;
+        IF (prev_name = '' OR prev_name <> TRIM(curr_record.event_name)) AND num_players > 1 THEN
+            result := result || '    </players>' || E'\n';
         END IF;
+
+        IF prev_name <> TRIM(curr_record.event_name) AND tag = 0 THEN
+            result := result || '</medal>' || E'\n';
+            tag := 1;
+        END IF;
+
+        IF prev_name <> TRIM(curr_record.event_name) AND tag = 1 THEN
+            result := result || '<medal>' || E'\n';
+            result := result || '    <event>' || curr_record.event_name || '</event>' || E'\n';
+            tag := 0;
+        END IF;
+
+        IF (prev_name = '' OR prev_name <> TRIM(curr_record.event_name)) AND num_players > 1 THEN
+           result := result || '    <players>' || E'\n';
+        END IF;
+
+        IF num_players > 1 THEN 
+            result := result || '        <player>' || curr_record.player_name || '</player>' || E'\n';
+        ELSE 
+            result := result || '    <player>' || curr_record.player_name || '</player>' || E'\n';
+        END IF; 
+
+        prev_name := TRIM(curr_record.event_name);
     END LOOP;
+
+    result := result || '</medal>' || E'\n';
+
     RETURN result;
-END;
-$$
-LANGUAGE 'plpgsql' IMMUTABLE;
+END; $toXML$ LANGUAGE 'plpgsql';
+
 
 **************** RESULT ***************************************************************
-<INSERT YOUR RESULT HERE>
+SELECT * FROM to_xml();
+
+                     to_xml                      
+-------------------------------------------------
+ <medal>                                        +
+     <event>100m Backstroke Men</event>         +
+     <player>Aaron Peirsol</player>             +
+ </medal>                                       +
+ <medal>                                        +
+     <event>100m Backstroke Women</event>       +
+     <player>Natalie Coughlin</player>          +
+ </medal>                                       +
+ <medal>                                        +
+     <event>100m Butterfly Men</event>          +
+     <player>Michael Phelps</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>100m Hurdles Women</event>          +
+     <player>Joanna Hayes</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>100m Men</event>                    +
+     <player>Justin Gatlin</player>             +
+ </medal>                                       +
+ <medal>                                        +
+     <event>200m Backstroke Men</event>         +
+     <player>Aaron Peirsol</player>             +
+ </medal>                                       +
+ <medal>                                        +
+     <event>200m Breaststroke Women</event>     +
+     <player>Amanda Beard</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>200m Butterfly Men</event>          +
+     <player>Michael Phelps</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>200m Individual Medley Men</event>  +
+     <player>Michael Phelps</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>200m Men</event>                    +
+     <player>Shawn Crawford</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>400m Individual Medley Men</event>  +
+     <player>Michael Phelps</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>400m Men</event>                    +
+     <player>Jeremy Wariner</player>            +
+     </players>                                 +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x100m Medley Relay Men</event>     +
+     <players>                                  +
+         <player>Aaron Peirsol</player>         +
+         <player>Brendan Hansen</player>        +
+         <player>Ian Crocker</player>           +
+         <player>Jason Lezak</player>           +
+         <player>Lenny Krayzelburg</player>     +
+         <player>Michael Phelps</player>        +
+         <player>Neil Walker</player>           +
+     </players>                                 +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Men</event>  +
+     <players>                                  +
+         <player>Klete Keller</player>          +
+         <player>Ryan Lochte</player>           +
+         <player>Peter Vanderkaay</player>      +
+         <player>Scott Goldblatt</player>       +
+         <player>Michael Phelps</player>        +
+     </players>                                 +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Women</event>+
+     <players>                                  +
+         <player>Kaitlin Sandeno</player>       +
+         <player>Lindsay Benko</player>         +
+         <player>Carly Piper</player>           +
+         <player>Natalie Coughlin</player>      +
+         <player>Dana Vollmer</player>          +
+     </players>                                 +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Men</event>            +
+     <players>                                  +
+         <player>Otis Harris Jr</player>        +
+         <player>Darold Williamson</player>     +
+         <player>Jeremy Wariner</player>        +
+         <player>Derrick Brew</player>          +
+     </players>                                 +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Women</event>          +
+     <players>                                  +
+         <player>Monique Henderson</player>     +
+         <player>Deedee Trotter</player>        +
+         <player>Sanya Richards</player>        +
+         <player>Monique Hennagan</player>      +
+ </medal>                                       +
+ <medal>                                        +
+     <event>50m Freestyle Men</event>           +
+     <player>Gary Hall Jr.</player>             +
+ </medal>                                       +
+ <medal>                                        +
+     <event>Long Jump Men</event>               +
+     <player>Dwight Phillips</player>           +
+ </medal>                                       +
+ <medal>                                        +
+     <event>Pole Vault Men</event>              +
+     <player>Timothy Mack</player>              +
+ </medal>                                       +
+ 
+(1 row)
+
 =============================================================================================
 

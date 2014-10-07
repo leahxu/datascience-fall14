@@ -1,0 +1,559 @@
+                    to_xml                     
+-----------------------------------------------
+ <medal>                                      +
+   <event>100m Backstroke Women</event>       +
+   <player>Natalie Coughlin</player>          +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x400m Relay Men</event>            +
+   <player>Jeremy Wariner</player>            +
+ </medal>                                     +
+ <medal>                                      +
+   <event>50m Freestyle Men</event>           +
+   <player>Gary Hall Jr.</player>             +
+ </medal>                                     +
+ <medal>                                      +
+   <event>200m Butterfly Men</event>          +
+   <player>Michael Phelps</player>            +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x400m Relay Men</event>            +
+   <player>Otis Harris Jr</player>            +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x200m Freestyle Relay Men</event>  +
+   <player>Ryan Lochte</player>               +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x200m Freestyle Relay Women</event>+
+   <player>Natalie Coughlin</player>          +
+   <player>Carly Piper</player>               +
+ </medal>                                     +
+ <medal>                                      +
+   <event>Long Jump Men</event>               +
+   <player>Dwight Phillips</player>           +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x400m Relay Women</event>          +
+   <player>Monique Hennagan</player>          +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x400m Relay Men</event>            +
+   <player>Derrick Brew</player>              +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x200m Freestyle Relay Men</event>  +
+   <player>Peter Vanderkaay</player>          +
+   <player>Scott Goldblatt</player>           +
+ </medal>                                     +
+ <medal>                                      +
+   <event>100m Men</event>                    +
+   <player>Justin Gatlin</player>             +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x400m Relay Women</event>          +
+   <player>Deedee Trotter</player>            +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x100m Medley Relay Men</event>     +
+   <player>Aaron Peirsol</player>             +
+ </medal>                                     +
+ <medal>                                      +
+   <event>100m Butterfly Men</event>          +
+   <player>Michael Phelps</player>            +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x100m Medley Relay Men</event>     +
+   <player>Ian Crocker</player>               +
+ </medal>                                     +
+ <medal>                                      +
+   <event>200m Backstroke Men</event>         +
+   <player>Aaron Peirsol</player>             +
+ </medal>                                     +
+ <medal>                                      +
+   <event>Pole Vault Men</event>              +
+   <player>Timothy Mack</player>              +
+ </medal>                                     +
+ <medal>                                      +
+   <event>400m Individual Medley Men</event>  +
+   <player>Michael Phelps</player>            +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x400m Relay Men</event>            +
+   <player>Darold Williamson</player>         +
+ </medal>                                     +
+ <medal>                                      +
+   <event>100m Backstroke Men</event>         +
+   <player>Aaron Peirsol</player>             +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x200m Freestyle Relay Women</event>+
+   <player>Kaitlin Sandeno</player>           +
+ </medal>                                     +
+ <medal>                                      +
+   <event>200m Breaststroke Women</event>     +
+   <player>Amanda Beard</player>              +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x400m Relay Women</event>          +
+   <player>Monique Henderson</player>         +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x200m Freestyle Relay Men</event>  +
+   <player>Klete Keller</player>              +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x100m Medley Relay Men</event>     +
+   <player>Jason Lezak</player>               +
+ </medal>                                     +
+ <medal>                                      +
+   <event>200m Individual Medley Men</event>  +
+   <player>Michael Phelps</player>            +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x200m Freestyle Relay Men</event>  +
+   <player>Michael Phelps</player>            +
+ </medal>                                     +
+ <medal>                                      +
+   <event>100m Hurdles Women</event>          +
+   <player>Joanna Hayes</player>              +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x100m Medley Relay Men</event>     +
+   <player>Neil Walker</player>               +
+   <player>Brendan Hansen</player>            +
+   <player>Lenny Krayzelburg</player>         +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x200m Freestyle Relay Women</event>+
+   <player>Lindsay Benko</player>             +
+ </medal>                                     +
+ <medal>                                      +
+   <event>200m Men</event>                    +
+   <player>Shawn Crawford</player>            +
+ </medal>                                     +
+ <medal>                                      +
+   <event>400m Men</event>                    +
+   <player>Jeremy Wariner</player>            +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x100m Medley Relay Men</event>     +
+   <player>Michael Phelps</player>            +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x400m Relay Women</event>          +
+   <player>Sanya Richards</player>            +
+ </medal>                                     +
+ <medal>                                      +
+   <event>4x200m Freestyle Relay Women</event>+
+   <player>Dana Vollmer</player>              +
+ </medal>                                     +
+ 
+(1 row)
+
+                     to_xml                      
+-------------------------------------------------
+ <medal>                                        +
+     <event>100m Backstroke Women</event>       +
+     <player>Natalie Coughlin</player>          +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Men</event>            +
+     <player>Jeremy Wariner</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>50m Freestyle Men</event>           +
+     <player>Gary Hall Jr.</player>             +
+ </medal>                                       +
+ <medal>                                        +
+     <event>200m Butterfly Men</event>          +
+     <player>Michael Phelps</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Men</event>            +
+     <player>Otis Harris Jr</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Men</event>  +
+     <player>Ryan Lochte</player>               +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Women</event>+
+     <player>Natalie Coughlin</player>          +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Women</event>+
+     <player>Carly Piper</player>               +
+ </medal>                                       +
+ <medal>                                        +
+     <event>Long Jump Men</event>               +
+     <player>Dwight Phillips</player>           +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Women</event>          +
+     <player>Monique Hennagan</player>          +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Men</event>            +
+     <player>Derrick Brew</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Men</event>  +
+     <player>Peter Vanderkaay</player>          +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Men</event>  +
+     <player>Scott Goldblatt</player>           +
+ </medal>                                       +
+ <medal>                                        +
+     <event>100m Men</event>                    +
+     <player>Justin Gatlin</player>             +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Women</event>          +
+     <player>Deedee Trotter</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x100m Medley Relay Men</event>     +
+     <player>Aaron Peirsol</player>             +
+ </medal>                                       +
+ <medal>                                        +
+     <event>100m Butterfly Men</event>          +
+     <player>Michael Phelps</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x100m Medley Relay Men</event>     +
+     <player>Ian Crocker</player>               +
+ </medal>                                       +
+ <medal>                                        +
+     <event>200m Backstroke Men</event>         +
+     <player>Aaron Peirsol</player>             +
+ </medal>                                       +
+ <medal>                                        +
+     <event>Pole Vault Men</event>              +
+     <player>Timothy Mack</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>400m Individual Medley Men</event>  +
+     <player>Michael Phelps</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Men</event>            +
+     <player>Darold Williamson</player>         +
+ </medal>                                       +
+ <medal>                                        +
+     <event>100m Backstroke Men</event>         +
+     <player>Aaron Peirsol</player>             +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Women</event>+
+     <player>Kaitlin Sandeno</player>           +
+ </medal>                                       +
+ <medal>                                        +
+     <event>200m Breaststroke Women</event>     +
+     <player>Amanda Beard</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Women</event>          +
+     <player>Monique Henderson</player>         +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Men</event>  +
+     <player>Klete Keller</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x100m Medley Relay Men</event>     +
+     <player>Jason Lezak</player>               +
+ </medal>                                       +
+ <medal>                                        +
+     <event>200m Individual Medley Men</event>  +
+     <player>Michael Phelps</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Men</event>  +
+     <player>Michael Phelps</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>100m Hurdles Women</event>          +
+     <player>Joanna Hayes</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x100m Medley Relay Men</event>     +
+     <player>Neil Walker</player>               +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x100m Medley Relay Men</event>     +
+     <player>Brendan Hansen</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x100m Medley Relay Men</event>     +
+     <player>Lenny Krayzelburg</player>         +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Women</event>+
+     <player>Lindsay Benko</player>             +
+ </medal>                                       +
+ <medal>                                        +
+     <event>200m Men</event>                    +
+     <player>Shawn Crawford</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>400m Men</event>                    +
+     <player>Jeremy Wariner</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x100m Medley Relay Men</event>     +
+     <player>Michael Phelps</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Women</event>          +
+     <player>Sanya Richards</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Women</event>+
+     <player>Dana Vollmer</player>              +
+ </medal>                                       +
+ 
+(1 row)
+
+                     to_xml                      
+-------------------------------------------------
+ <medal>                                        +
+     <event>100m Backstroke Women</event>       +
+   <player>Natalie Coughlin</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Men</event>            +
+   <player>Jeremy Wariner</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>50m Freestyle Men</event>           +
+   <player>Gary Hall Jr.</player>               +
+ </medal>                                       +
+ <medal>                                        +
+     <event>200m Butterfly Men</event>          +
+   <player>Michael Phelps</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Men</event>            +
+   <player>Otis Harris Jr</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Men</event>  +
+   <player>Ryan Lochte</player>                 +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Women</event>+
+   <player>Natalie Coughlin</player>            +
+   <player>Carly Piper</player>                 +
+ </medal>                                       +
+ <medal>                                        +
+     <event>Long Jump Men</event>               +
+   <player>Dwight Phillips</player>             +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Women</event>          +
+   <player>Monique Hennagan</player>            +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Men</event>            +
+   <player>Derrick Brew</player>                +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Men</event>  +
+   <player>Peter Vanderkaay</player>            +
+   <player>Scott Goldblatt</player>             +
+ </medal>                                       +
+ <medal>                                        +
+     <event>100m Men</event>                    +
+   <player>Justin Gatlin</player>               +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Women</event>          +
+   <player>Deedee Trotter</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x100m Medley Relay Men</event>     +
+   <player>Aaron Peirsol</player>               +
+ </medal>                                       +
+ <medal>                                        +
+     <event>100m Butterfly Men</event>          +
+   <player>Michael Phelps</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x100m Medley Relay Men</event>     +
+   <player>Ian Crocker</player>                 +
+ </medal>                                       +
+ <medal>                                        +
+     <event>200m Backstroke Men</event>         +
+   <player>Aaron Peirsol</player>               +
+ </medal>                                       +
+ <medal>                                        +
+     <event>Pole Vault Men</event>              +
+   <player>Timothy Mack</player>                +
+ </medal>                                       +
+ <medal>                                        +
+     <event>400m Individual Medley Men</event>  +
+   <player>Michael Phelps</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Men</event>            +
+   <player>Darold Williamson</player>           +
+ </medal>                                       +
+ <medal>                                        +
+     <event>100m Backstroke Men</event>         +
+   <player>Aaron Peirsol</player>               +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Women</event>+
+   <player>Kaitlin Sandeno</player>             +
+ </medal>                                       +
+ <medal>                                        +
+     <event>200m Breaststroke Women</event>     +
+   <player>Amanda Beard</player>                +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Women</event>          +
+   <player>Monique Henderson</player>           +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Men</event>  +
+   <player>Klete Keller</player>                +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x100m Medley Relay Men</event>     +
+   <player>Jason Lezak</player>                 +
+ </medal>                                       +
+ <medal>                                        +
+     <event>200m Individual Medley Men</event>  +
+   <player>Michael Phelps</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Men</event>  +
+   <player>Michael Phelps</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>100m Hurdles Women</event>          +
+   <player>Joanna Hayes</player>                +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x100m Medley Relay Men</event>     +
+   <player>Neil Walker</player>                 +
+   <player>Brendan Hansen</player>              +
+   <player>Lenny Krayzelburg</player>           +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Women</event>+
+   <player>Lindsay Benko</player>               +
+ </medal>                                       +
+ <medal>                                        +
+     <event>200m Men</event>                    +
+   <player>Shawn Crawford</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>400m Men</event>                    +
+   <player>Jeremy Wariner</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x100m Medley Relay Men</event>     +
+   <player>Michael Phelps</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x400m Relay Women</event>          +
+   <player>Sanya Richards</player>              +
+ </medal>                                       +
+ <medal>                                        +
+     <event>4x200m Freestyle Relay Women</event>+
+   <player>Dana Vollmer</player>                +
+ </medal>                                       +
+ 
+(1 row)
+
+                   name                   |                   name                   |  medal  
+------------------------------------------+------------------------------------------+---------
+ 100m Backstroke Women                    | Natalie Coughlin                         | GOLD   
+ 4x400m Relay Men                         | Jeremy Wariner                           | GOLD   
+ 50m Freestyle Men                        | Gary Hall Jr.                            | GOLD   
+ 200m Butterfly Men                       | Michael Phelps                           | GOLD   
+ 4x400m Relay Men                         | Otis Harris Jr                           | GOLD   
+ 4x200m Freestyle Relay Men               | Ryan Lochte                              | GOLD   
+ 4x200m Freestyle Relay Women             | Natalie Coughlin                         | GOLD   
+ 4x200m Freestyle Relay Women             | Carly Piper                              | GOLD   
+ Long Jump Men                            | Dwight Phillips                          | GOLD   
+ 4x400m Relay Women                       | Monique Hennagan                         | GOLD   
+ 4x400m Relay Men                         | Derrick Brew                             | GOLD   
+ 4x200m Freestyle Relay Men               | Peter Vanderkaay                         | GOLD   
+ 4x200m Freestyle Relay Men               | Scott Goldblatt                          | GOLD   
+ 100m Men                                 | Justin Gatlin                            | GOLD   
+ 4x400m Relay Women                       | Deedee Trotter                           | GOLD   
+ 4x100m Medley Relay Men                  | Aaron Peirsol                            | GOLD   
+ 100m Butterfly Men                       | Michael Phelps                           | GOLD   
+ 4x100m Medley Relay Men                  | Ian Crocker                              | GOLD   
+ 200m Backstroke Men                      | Aaron Peirsol                            | GOLD   
+ Pole Vault Men                           | Timothy Mack                             | GOLD   
+ 400m Individual Medley Men               | Michael Phelps                           | GOLD   
+ 4x400m Relay Men                         | Darold Williamson                        | GOLD   
+ 100m Backstroke Men                      | Aaron Peirsol                            | GOLD   
+ 4x200m Freestyle Relay Women             | Kaitlin Sandeno                          | GOLD   
+ 200m Breaststroke Women                  | Amanda Beard                             | GOLD   
+ 4x400m Relay Women                       | Monique Henderson                        | GOLD   
+ 4x200m Freestyle Relay Men               | Klete Keller                             | GOLD   
+ 4x100m Medley Relay Men                  | Jason Lezak                              | GOLD   
+ 200m Individual Medley Men               | Michael Phelps                           | GOLD   
+ 4x200m Freestyle Relay Men               | Michael Phelps                           | GOLD   
+ 100m Hurdles Women                       | Joanna Hayes                             | GOLD   
+ 4x100m Medley Relay Men                  | Neil Walker                              | GOLD   
+ 4x100m Medley Relay Men                  | Brendan Hansen                           | GOLD   
+ 4x100m Medley Relay Men                  | Lenny Krayzelburg                        | GOLD   
+ 4x200m Freestyle Relay Women             | Lindsay Benko                            | GOLD   
+ 200m Men                                 | Shawn Crawford                           | GOLD   
+ 400m Men                                 | Jeremy Wariner                           | GOLD   
+ 4x100m Medley Relay Men                  | Michael Phelps                           | GOLD   
+ 4x400m Relay Women                       | Sanya Richards                           | GOLD   
+ 4x200m Freestyle Relay Women             | Dana Vollmer                             | GOLD   
+(40 rows)
+
+                   name                   |                   name                   |  medal  
+------------------------------------------+------------------------------------------+---------
+ 100m Backstroke Women                    | Natalie Coughlin                         | GOLD   
+ 4x400m Relay Men                         | Jeremy Wariner                           | GOLD   
+ 50m Freestyle Men                        | Gary Hall Jr.                            | GOLD   
+ 200m Butterfly Men                       | Michael Phelps                           | GOLD   
+ 4x400m Relay Men                         | Otis Harris Jr                           | GOLD   
+ 4x200m Freestyle Relay Men               | Ryan Lochte                              | GOLD   
+ 4x200m Freestyle Relay Women             | Natalie Coughlin                         | GOLD   
+ 4x200m Freestyle Relay Women             | Carly Piper                              | GOLD   
+ Long Jump Men                            | Dwight Phillips                          | GOLD   
+ 4x400m Relay Women                       | Monique Hennagan                         | GOLD   
+ 4x400m Relay Men                         | Derrick Brew                             | GOLD   
+ 4x200m Freestyle Relay Men               | Peter Vanderkaay                         | GOLD   
+ 4x200m Freestyle Relay Men               | Scott Goldblatt                          | GOLD   
+ 100m Men                                 | Justin Gatlin                            | GOLD   
+ 4x400m Relay Women                       | Deedee Trotter                           | GOLD   
+ 4x100m Medley Relay Men                  | Aaron Peirsol                            | GOLD   
+ 100m Butterfly Men                       | Michael Phelps                           | GOLD   
+ 4x100m Medley Relay Men                  | Ian Crocker                              | GOLD   
+ 200m Backstroke Men                      | Aaron Peirsol                            | GOLD   
+ Pole Vault Men                           | Timothy Mack                             | GOLD   
+ 400m Individual Medley Men               | Michael Phelps                           | GOLD   
+ 4x400m Relay Men                         | Darold Williamson                        | GOLD   
+ 100m Backstroke Men                      | Aaron Peirsol                            | GOLD   
+ 4x200m Freestyle Relay Women             | Kaitlin Sandeno                          | GOLD   
+ 200m Breaststroke Women                  | Amanda Beard                             | GOLD   
+ 4x400m Relay Women                       | Monique Henderson                        | GOLD   
+ 4x200m Freestyle Relay Men               | Klete Keller                             | GOLD   
+ 4x100m Medley Relay Men                  | Jason Lezak                              | GOLD   
+ 200m Individual Medley Men               | Michael Phelps                           | GOLD   
+ 4x200m Freestyle Relay Men               | Michael Phelps                           | GOLD   
+ 100m Hurdles Women                       | Joanna Hayes                             | GOLD   
+ 4x100m Medley Relay Men                  | Neil Walker                              | GOLD   
+ 4x100m Medley Relay Men                  | Brendan Hansen                           | GOLD   
+ 4x100m Medley Relay Men                  | Lenny Krayzelburg                        | GOLD   
+ 4x200m Freestyle Relay Women             | Lindsay Benko                            | GOLD   
+ 200m Men                                 | Shawn Crawford                           | GOLD   
+ 400m Men                                 | Jeremy Wariner                           | GOLD   
+ 4x100m Medley Relay Men                  | Michael Phelps                           | GOLD   
+ 4x400m Relay Women                       | Sanya Richards                           | GOLD   
+ 4x200m Freestyle Relay Women             | Dana Vollmer                             | GOLD   
+(40 rows)
+
