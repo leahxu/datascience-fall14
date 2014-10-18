@@ -1,0 +1,55 @@
+Year  1930  1934  1938  1950  1954  1958  1962  1966  1970  1974  1978  1982  \
+Team                                                                           
+ARG      2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN     1   NaN   
+AUT    NaN     4   NaN   NaN     3   NaN   NaN   NaN   NaN   NaN   NaN   NaN   
+BEL    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   
+BRA    NaN   NaN     3     2   NaN     1     1   NaN     1     4     3   NaN   
+BUL    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   
+CHI    NaN   NaN   NaN   NaN   NaN   NaN     3   NaN   NaN   NaN   NaN   NaN   
+CRO    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   
+ENG    NaN   NaN   NaN   NaN   NaN   NaN   NaN     1   NaN   NaN   NaN   NaN   
+ESP    NaN   NaN   NaN     4   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   
+FRA    NaN   NaN   NaN   NaN   NaN     3   NaN   NaN   NaN   NaN   NaN     4   
+GER    NaN     3   NaN   NaN     1     4   NaN     2     3     1   NaN     2   
+HUN    NaN   NaN     2   NaN     2   NaN   NaN   NaN   NaN   NaN   NaN   NaN   
+ITA    NaN     1     1   NaN   NaN   NaN   NaN   NaN     2   NaN     4     1   
+KOR    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   
+NED    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN     2     2   NaN   
+POL    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN     3   NaN     3   
+POR    NaN   NaN   NaN   NaN   NaN   NaN   NaN     3   NaN   NaN   NaN   NaN   
+SWE    NaN   NaN     4     3   NaN     2   NaN   NaN   NaN   NaN   NaN   NaN   
+TCH    NaN     2   NaN   NaN   NaN   NaN     2   NaN   NaN   NaN   NaN   NaN   
+TUR    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   
+URS    NaN   NaN   NaN   NaN   NaN   NaN   NaN     4   NaN   NaN   NaN   NaN   
+URU      1   NaN   NaN     1     4   NaN   NaN   NaN     4   NaN   NaN   NaN   
+USA      3   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   
+YUG      4   NaN   NaN   NaN   NaN   NaN     4   NaN   NaN   NaN   NaN   NaN   
+
+Year  1986  1990  1994  1998  2002  2006  2010  2014  
+Team                                                  
+ARG      1     2   NaN   NaN   NaN   NaN   NaN     2  
+AUT    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN  
+BEL      4   NaN   NaN   NaN   NaN   NaN   NaN   NaN  
+BRA    NaN   NaN     1     2     1   NaN   NaN     4  
+BUL    NaN   NaN     4   NaN   NaN   NaN   NaN   NaN  
+CHI    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN  
+CRO    NaN   NaN   NaN     3   NaN   NaN   NaN   NaN  
+ENG    NaN     4   NaN   NaN   NaN   NaN   NaN   NaN  
+ESP    NaN   NaN   NaN   NaN   NaN   NaN     1   NaN  
+FRA      3   NaN   NaN     1   NaN     2   NaN   NaN  
+GER      2     1   NaN   NaN     2     3     3     1  
+HUN    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN  
+ITA    NaN     3     2   NaN   NaN     1   NaN   NaN  
+KOR    NaN   NaN   NaN   NaN     4   NaN   NaN   NaN  
+NED    NaN   NaN   NaN     4   NaN   NaN     2     3  
+POL    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN  
+POR    NaN   NaN   NaN   NaN   NaN     4   NaN   NaN  
+SWE    NaN   NaN     3   NaN   NaN   NaN   NaN   NaN  
+TCH    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN  
+TUR    NaN   NaN   NaN   NaN     3   NaN   NaN   NaN  
+URS    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN  
+URU    NaN   NaN   NaN   NaN   NaN   NaN     4   NaN  
+USA    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN  
+YUG    NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN  
+
+[24 rows x 20 columns]
