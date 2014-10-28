@@ -40,16 +40,20 @@ training_file = 'products_training.json'
 
 
 # Dedupe can take custom field comparison functions
-# Here you need to define any custom comparison functions you may use for different fields
+# Custom customComparator that returns true if the absolute value of the two numbers 
+# is within 20% of the mean of the two numbers
+def customComparator(field_1, field_2):
+    price_1 = float(re.search(r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?', field_1).group(0))
+    price_2 = float(re.search(r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?', field_2).group(0))
 
-def customComparator(field_1, field_2) :
-    if field_1 and field_2 :
-        if field_1 == field_2 :
+    if price_1 and price_2 :
+        if abs(price_1 - price_2) < 0.2*(price_1 + price_2)/float(2) :
             return 1
         else:
             return 0
     else :
         return nan
+
 
 def preProcess(column):
     """
@@ -96,7 +100,9 @@ else:
     # to be used and specify any customComparators. Please read the dedupe manual for details
     fields = [
         {'field' : 'title', 'type': 'String'},
-        {'field' : 'price', 'type': 'Custom', 'has missing':True, 'comparator' : customComparator}
+        {'field' : 'price', 'type': 'Custom', 'has missing':True, 'comparator' : customComparator},
+        {'field' : 'manufacturer', 'type': 'String', 'has missing': True}
+        #{'field' : 'description', 'type': 'String', 'has missing': True}
         ]
 
     # Create a new deduper object and pass our data model to it.

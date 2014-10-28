@@ -1,0 +1,33 @@
+Leah Xu
+
+Fields 
+Chose to ignore the description field because the same product could easily have
+very different descriptions depending on who wrote the description. Use dedupe's 
+comparator for title and manufacturer (string evaluation) since dedupe uses an 
+advanced algorithm. Used a custom comparator for price
+
+{'field' : 'title', 'type': 'String'},
+{'field' : 'price', 'type': 'Custom', 'has missing':True, 'comparator' : customComparator},
+{'field' : 'manufacturer', 'type': 'String', 'has missing': True}
+
+Custom customComparator for price field
+Returns true if the absolute value of the prices is within 20% of the mean price
+
+def customComparator(field_1, field_2):
+    price_1 = float(re.search(r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?', field_1).group(0))
+    price_2 = float(re.search(r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?', field_2).group(0))
+
+    if price_1 and price_2 :
+        if abs(price_1 - price_2) < 0.2*(price_1 + price_2)/float(2) :
+            return 1
+        else:
+            return 0
+    else :
+        return nan
+
+Evaluation
+
+Both the precision and the recall are very low with precision about double that 
+of recall (which corresponds to the settings specified).
+Precision: 0.337519623234
+Recall: 0.165384615385
