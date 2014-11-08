@@ -9,16 +9,15 @@ import avro.schema
 from avro.datafile import DataFileReader, DataFileWriter
 from avro.io import DatumReader, DatumWriter
 
-countries = pd.DataFrame()
-temp = []
+countries = []
 
 reader = DataFileReader(open("countries.avro", "r"), DatumReader())
 
 for country in reader:
-	temp.append(countries.append(country, ignore_index=True))
+	countries.append(country)
 reader.close()
 
-countries = pd.concat(temp)
+countries = pd.DataFrame(countries)
 
 pop_ten_million = countries[countries.population > 10000000].name.count()
 

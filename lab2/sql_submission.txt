@@ -12,9 +12,12 @@ FROM events e
 WHERE e.name = '110m Hurdles Men'
 	AND e.olympic_id like '%2000%';
 **************** RESULT ***************************************************************
+ event_id | olympic_id |                   name                   | result 
+----------+------------+------------------------------------------+--------
  E28      | SYD2000    | Anier Garcia                             |     13
  E28      | SYD2000    | Terrence Trammell                        |  13.16
  E28      | SYD2000    | Mark Crear                               |  13.22
+(3 rows)
 =============================================================================================
 
 === 2
@@ -49,7 +52,6 @@ FROM events e INNER JOIN olympics o
 === 4
 For 2000 Olympics, find the 5 countries with the smallest values of ``number-of-medals/population''.
 
-For 2000 Olympics, find the 5 countries with the smallest values of ``number-of-medals/population''.
 Question is ambiguous as to whether it wants the definitive number of medals or number of 
 winnings per country. I went with the absolute number of medals per country 
 (e.g. team of 4 winning goal will result in 4 medals)
@@ -82,73 +84,73 @@ SELECT countries.name, CAST(COUNT(results.result) AS DECIMAL)/countries.populati
 === 5 
 Write a query to find the number of players per country. The output should be a table with two attributes: country_name, num_players.
 
-SELECT countries.name, COUNT(players.player_id)
+SELECT countries.name, COUNT(players.player_id) AS num_players
 	FROM countries
 		LEFT OUTER JOIN players
 			ON countries.country_id = players.country_id
 	GROUP BY countries.name
 	ORDER BY countries.name ASC;
 **************** RESULT ***************************************************************
-                   name                   | count 
-------------------------------------------+-------
- Algeria                                  |     4
- Argentina                                |     1
- Australia                                |    34
- Austria                                  |     2
- Barbados                                 |     1
- Belarus                                  |     7
- Brazil                                   |     9
- Bulgaria                                 |     1
- Cameroon                                 |     1
- Canada                                   |     1
- China                                    |     8
- Costa Rica                               |     1
- Croatia                                  |     1
- Cuba                                     |    12
- Czech Republic                           |     3
- Denmark                                  |     2
- Dominican Republic                       |     1
- Eritrea                                  |     1
- Estonia                                  |     2
- Ethiopia                                 |    12
- Finland                                  |     1
- France                                   |    10
- Germany                                  |    22
- Greece                                   |     7
- Hungary                                  |     4
- Iceland                                  |     1
- Ireland                                  |     1
- Italy                                    |    12
- Jamaica                                  |    18
- Japan                                    |    16
- Kazakhstan                               |     2
- Kenya                                    |    13
- Latvia                                   |     2
- Lithuania                                |     2
- Mexico                                   |     3
- Morocco                                  |     5
- Mozambique                               |     1
- Netherlands                              |    13
- Nigeria                                  |    12
- Norway                                   |     3
- Poland                                   |     5
- Portugal                                 |     3
- Romania                                  |    10
- Russia                                   |    38
- Saudi Arabia                             |     1
- Slovakia                                 |     1
- Slovenia                                 |     1
- South Africa                             |    10
- Spain                                    |     4
- Sri Lanka                                |     1
- Sweden                                   |     9
- The Bahamas                              |     5
- Trinidad and Tobago                      |     2
- Turkey                                   |     1
- Ukraine                                  |     9
- United Kingdom                           |    12
- United States                            |    88
- Zimbabwe                                 |     1
+                   name                   | num_players 
+------------------------------------------+-------------
+ Algeria                                  |           4
+ Argentina                                |           1
+ Australia                                |          34
+ Austria                                  |           2
+ Barbados                                 |           1
+ Belarus                                  |           7
+ Brazil                                   |           9
+ Bulgaria                                 |           1
+ Cameroon                                 |           1
+ Canada                                   |           1
+ China                                    |           8
+ Costa Rica                               |           1
+ Croatia                                  |           1
+ Cuba                                     |          12
+ Czech Republic                           |           3
+ Denmark                                  |           2
+ Dominican Republic                       |           1
+ Eritrea                                  |           1
+ Estonia                                  |           2
+ Ethiopia                                 |          12
+ Finland                                  |           1
+ France                                   |          10
+ Germany                                  |          22
+ Greece                                   |           7
+ Hungary                                  |           4
+ Iceland                                  |           1
+ Ireland                                  |           1
+ Italy                                    |          12
+ Jamaica                                  |          18
+ Japan                                    |          16
+ Kazakhstan                               |           2
+ Kenya                                    |          13
+ Latvia                                   |           2
+ Lithuania                                |           2
+ Mexico                                   |           3
+ Morocco                                  |           5
+ Mozambique                               |           1
+ Netherlands                              |          13
+ Nigeria                                  |          12
+ Norway                                   |           3
+ Poland                                   |           5
+ Portugal                                 |           3
+ Romania                                  |          10
+ Russia                                   |          38
+ Saudi Arabia                             |           1
+ Slovakia                                 |           1
+ Slovenia                                 |           1
+ South Africa                             |          10
+ Spain                                    |           4
+ Sri Lanka                                |           1
+ Sweden                                   |           9
+ The Bahamas                              |           5
+ Trinidad and Tobago                      |           2
+ Turkey                                   |           1
+ Ukraine                                  |           9
+ United Kingdom                           |          12
+ United States                            |          88
+ Zimbabwe                                 |           1
 (58 rows)
 
 =============================================================================================
@@ -182,8 +184,8 @@ ORDER BY country_id ASC, birthdate DESC;
 For 2004 Olympics, generate a list - (birthyear, num-players, num-gold-medals) - containing the years in which the players were born, the number of players born in each year, and the number of gold medals won by the players born in each year.
 
 SELECT EXTRACT(YEAR FROM birthdate) AS birthyear,
-COUNT(distinct p.player_id) AS num_players,
-SUM(case WHEN ( r.medal = 'GOLD') THEN 1 ELSE 0 END ) AS num_gold_medals
+COUNT(DISTINCT p.player_id) AS num_players,
+SUM(CASE WHEN ( r.medal = 'GOLD') THEN 1 ELSE 0 END ) AS num_gold_medals
 FROM players p, results r, events e 
 WHERE (p.player_id = r.player_id 
 	AND r.event_id = e.event_id 
