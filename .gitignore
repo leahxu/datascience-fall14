@@ -1,0 +1,6 @@
+# Package Files
+*.jar
+*.war
+*.ear
+
+/lab6/hadoop-2.3.0-cdh5.1.2
