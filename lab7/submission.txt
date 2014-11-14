@@ -1,24 +1,191 @@
 ===================== Cassandra: CQL Queries and Results
+Find the numClicks for OwnerId = 1, AdId = 3.
+
+CREATE TABLE data (
+    OwnerId INT,
+    AdId INT,
+    numClicks INT,
+    numImpressions INT,
+    PRIMARY KEY(OwnerId, AdId)
+);
+
+INSERT INTO data (OwnerId, AdId, numClicks) VALUES (1,1,1);
+INSERT INTO data (OwnerId, AdId, numClicks) VALUES (1,2,0);
+INSERT INTO data (OwnerId, AdId, numClicks) VALUES (1,3,1);
+INSERT INTO data (OwnerId, AdId, numClicks) VALUES (1,4,0);
+INSERT INTO data (OwnerId, AdId, numClicks) VALUES (2,1,0);
+INSERT INTO data (OwnerId, AdId, numClicks) VALUES (2,2,0);
+INSERT INTO data (OwnerId, AdId, numClicks) VALUES (2,3,0);
+INSERT INTO data (OwnerId, AdId, numClicks) VALUES (2,4,0);
+INSERT INTO data (OwnerId, AdId, numClicks) VALUES (3,1,1);
+INSERT INTO data (OwnerId, AdId, numClicks) VALUES (3,2,0);
+INSERT INTO data (OwnerId, AdId, numClicks) VALUES (3,3,2);
+INSERT INTO data (OwnerId, AdId, numClicks) VALUES (3,4,1);
+INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (1,1,10);
+INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (1,2,5);
+INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (1,3,20);
+INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (1,4,15);
+INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (2,1,10);
+INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (2,2,55);
+INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (2,3,13);
+INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (2,4,21);
+INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (3,1,32);
+INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (3,2,23);
+INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (3,3,44);
+INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (3,4,36);
 
 
+SELECT ownerid, adid, numclicks FROM data WHERE ownerid = 1 AND adid = 3;
+
+ ownerid | adid | numclicks
+---------+------+-----------
+       1 |    3 |         1
+
+(1 rows)
 
 
+Find the numClicks for OwnerId = 2.
+
+SELECT ownerid, adid, numclicks FROM data WHERE ownerid = 2;
+
+ ownerid | adid | numclicks
+---------+------+-----------
+       2 |    1 |         0
+       2 |    2 |         0
+       2 |    3 |         0
+       2 |    4 |         0
+
+(4 rows)
 
 ===================== Cassandra: Python Code
 
+import logging
 
+log = logging.getLogger()
+#log.setLevel('DEBUG')
+log.setLevel('WARN')
+handler = logging.StreamHandler()
+handler.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s"))
+log.addHandler(handler)
 
+from cassandra import ConsistencyLevel
+from cassandra.cluster import Cluster
+from cassandra.query import SimpleStatement
 
+KEYSPACE = "partone"
+
+def main():
+    cluster = Cluster(['127.0.0.1'])
+    session = cluster.connect()
+
+    log.info("creating keyspace...")
+    session.execute("""
+        CREATE KEYSPACE IF NOT EXISTS %s
+        WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': '2' }
+        """ % KEYSPACE)
+
+    log.info("setting keyspace...")
+    session.set_keyspace(KEYSPACE)
+
+    log.info("creating table...")
+    session.execute("""
+        CREATE TABLE IF NOT EXISTS data (
+            OwnerId INT,
+            AdId INT,
+            numClicks INT,
+            numImpressions INT,
+            PRIMARY KEY(OwnerId, AdId)
+        );
+ 
+        """)
+    session.execute("INSERT INTO data (OwnerId, AdId, numClicks) VALUES (1,1,1)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numClicks) VALUES (1,2,0)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numClicks) VALUES (1,3,1)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numClicks) VALUES (1,4,0)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numClicks) VALUES (2,1,0)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numClicks) VALUES (2,2,0)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numClicks) VALUES (2,3,0)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numClicks) VALUES (2,4,0)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numClicks) VALUES (3,1,1)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numClicks) VALUES (3,2,0)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numClicks) VALUES (3,3,2)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numClicks) VALUES (3,4,1)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (1,1,10)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (1,2,5)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (1,3,20)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (1,4,15)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (2,1,10)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (2,2,55)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (2,3,13)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (2,4,21)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (3,1,32)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (3,2,23)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (3,3,44)")
+    session.execute("INSERT INTO data (OwnerId, AdId, numImpressions) VALUES (3,4,36)")
+
+    future = session.execute_async("SELECT * FROM data")
+
+    try:
+        rows = future.result()
+    except Exception:
+        log.exeception()
+        
+    numClicks = {}
+    numImpressions = {}
+
+    print "OwnerId\tnumclicks/numImpressions"
+    for row in rows:
+        numClicks[row[0]] = numClicks.get(row[0], 0) + row[2]
+        numImpressions[row[0]] = numImpressions.get(row[0], 0) + row[3]
+    
+    for i in range(2, 3): 
+        print i, "\t", float(numClicks[i])/numImpressions[i]
+
+    session.execute("DROP KEYSPACE " + KEYSPACE)
+
+if __name__ == "__main__":
+    main()
 
 ===================== Cassandra: Output of Running the Python Code
 
+Find the ctr (numClicks/numImpressions) for each OwnerId, AdId pair.
 
+OwnerId	AdId	numclicks/numImpressions
+1 		1 		0.1
+1 		2 		0.0
+1 		3 		0.05
+1 		4 		0.0
+2 		1 		0.0
+2 		2 		0.0
+2 		3 		0.0
+2 		4 		0.0
+3 		1 		0.03125
+3 		2 		0.0
+3 		3 		0.0454545454545
+3 		4 		0.0277777777778
 
+Compute the ctr for each OwnerId.
 
+OwnerId	numclicks/numImpressions
+1 	0.04
+2 	0.0
+3 	0.0296296296296
 
+Compute the ctr for OwnerId = 1, AdId = 3.
+OwnerId	AdId	numclicks/numImpressions
+1 		3 		0.05
+
+Compute the ctr for OwnerId = 2.
+
+OwnerId	numclicks/numImpressions
+2 	0.0
 
 ===================== MongoDB Queries and Outputs
 
+Return cities with population less than 5 million grouped by state.
 
+Return states sorted by their total city population.
 
+Return the cities with minimum population by state.
 
+Finally, write a MapReduce operation to compute, for each state, the average population over the cities associated with the state. See this for the overview of MapReduce, and this for some examples.
