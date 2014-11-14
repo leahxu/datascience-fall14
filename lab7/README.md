@@ -76,15 +76,9 @@ Use the following simple instructions to install Cassandra.
   			VALUES (1746, 'john', 'smith');  
 
 - Step 5: Fetch the data fom users. At the cqlsh prompt type:
-<<<<<<< HEAD
 
  		- SELECT * FROM users;
 You should see the following output:
-
-=======
- 			- SELECT * FROM users;
-You should see the following output:
->>>>>>> e9226f82e1b2ed202d4b38e0739d91a583827dc8
  		- user_id | fname | lname
 		 ---------+-------+-------
     	     1745 |  john | smith
@@ -141,7 +135,6 @@ Consider the relational schema given in `schema.txt` in the `lab7` folder. The s
 `clicks` and `impressions`, and inserts some data into it. The `clicks` table maintains for each OwnerId and AdId, the number of clicks that it has
 received and the `impressions` table maintains for each OwnerId and AdId, the number of impressions of the AdId that we shown. 
 
-<<<<<<< HEAD
 - Create a Cassandra database using the schema. Although Cassandra exposes an SQL-like API, it does not allow joins. Hence the data must be stored in a **denormalized** fashion in a single table, so you have to modify the schema appropriately.
 
 - Write CQL queries for the following:
@@ -153,19 +146,8 @@ received and the `impressions` table maintains for each OwnerId and AdId, the nu
  	- Compute the ctr for each OwnerId.
  	- Compute the ctr for OwnerId = 1, AdId = 3.
  	- Compute the ctr for OwnerId = 2.
-=======
-- Create a Cassandra database using the schema. Although Cassandra exposes an SQL-like API, it does not allow joins. Hence the data must be stored in
-a **denormalized** fashion in a single table, so you have to modify the schema appropriately.
-
-- Write SQL queries for the following:
- 	- Compute the ctr (numClicks/numImpressions) for each OwnerId, AdId pair.
- 	- Compute the ctr for each OwnerId.
- 	- Compute the ctr for OwnerId = 1, AdId = 3.
- 	- Compute the ctr for OwnerId = 2.
 
 - On similar lines write a python application to create an appropriate schema, insert data, and do the above mentioned 4 tasks in Cassandra.   
->>>>>>> e9226f82e1b2ed202d4b38e0739d91a583827dc8
- 
  
 ### Submission
 Submit the following using the provided template *submission.txt* file.
