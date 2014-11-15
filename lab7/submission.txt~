@@ -150,35 +150,35 @@ if __name__ == "__main__":
 
 Find the ctr (numClicks/numImpressions) for each OwnerId, AdId pair.
 
-OwnerId AdId    numclicks/numImpressions
-1       1       0.1
-1       2       0.0
-1       3       0.05
-1       4       0.0
-2       1       0.0
-2       2       0.0
-2       3       0.0
-2       4       0.0
-3       1       0.03125
-3       2       0.0
-3       3       0.0454545454545
-3       4       0.0277777777778
+OwnerId	AdId	numclicks/numImpressions
+1 		1 		0.1
+1 		2 		0.0
+1 		3 		0.05
+1 		4 		0.0
+2 		1 		0.0
+2 		2 		0.0
+2 		3 		0.0
+2 		4 		0.0
+3 		1 		0.03125
+3 		2 		0.0
+3 		3 		0.0454545454545
+3 		4 		0.0277777777778
 
 Compute the ctr for each OwnerId.
 
-OwnerId numclicks/numImpressions
-1   0.04
-2   0.0
-3   0.0296296296296
+OwnerId	numclicks/numImpressions
+1 	0.04
+2 	0.0
+3 	0.0296296296296
 
 Compute the ctr for OwnerId = 1, AdId = 3.
-OwnerId AdId    numclicks/numImpressions
-1       3       0.05
+OwnerId	AdId	numclicks/numImpressions
+1 		3 		0.05
 
 Compute the ctr for OwnerId = 2.
 
-OwnerId numclicks/numImpressions
-2   0.0
+OwnerId	numclicks/numImpressions
+2 	0.0
 
 ===================== MongoDB Queries and Outputs
 
@@ -187,38 +187,38 @@ $ mongoimport --db zipcodes --collection zipdata --file /home/leahxu/datascience
 Return cities with population less than 5 million grouped by state.
 
 db.zipout.insert(db.zipdata.aggregate( { $group:
-                                          { _id: { state: "$state", city: "$city" },
-                                            pop: { $sum: "$pop" } } },
-                                       { $match: { pop: { $lt: 5*1000*1000 } } } ) )
+                         { _id: { state: "$state", city: "$city" },
+                           pop: { $sum: "$pop" } } },
+                      { $match: { pop: { $lt: 5*1000*1000 } } } ))
 
 
 Return states sorted by their total city population.
 
 db.zipout.insert(db.zipdata.aggregate( { $group :
-                                          { _id : "$state",
-                                            pop : { $sum : "$pop" } } },
-                                        { $sort : {pop : 1 } } ) )
+                         { _id : "$state",
+                           pop : { $sum : "$pop" } } },
+                       { $sort : {pop : 1 } } ))
 
 Return the cities with minimum population by state.
 
 ASSUMPTION: Return the city with minimum population for each state. 
 
 db.zipout.insert(db.zipdata.aggregate( { $group:
-                                          { _id: { state: "$state", city: "$city" },
-                                            pop: { $sum: "$pop" } } },
-                                        { $sort: { pop: 1 } },
-                                        { $group:
-                                          { _id : "$_id.state",
-                                            smallestCity: { $first: "$_id.city" },
-                                            smallestPop:  { $first: "$pop" } } },
-                                        { $project:
-                                          { _id: 0,
-                                            state: "$_id",
-                                            smallestCity: { name: "$smallestCity", pop: "$smallestPop" } } } ) )
+                         { _id: { state: "$state", city: "$city" },
+                           pop: { $sum: "$pop" } } },
+                       { $sort: { pop: 1 } },
+                       { $group:
+                         { _id : "$_id.state",
+                           smallestCity: { $first: "$_id.city" },
+                           smallestPop:  { $first: "$pop" } } },
+                       { $project:
+                         { _id: 0,
+                           state: "$_id",
+                           smallestCity: { name: "$smallestCity", pop: "$smallestPop" } } } ))
 
 mongoexport --db zipcodes --collection zipout --out aggregateout.json
 
-***Output for these three queries are in aggregate.txt***
+Output for these three queries are in aggregateout.json
 
 MapReduce operation to compute, for each state, the average population over the cities associated with the state. 
 
@@ -226,7 +226,9 @@ var map = function() { emit(this.state, this.pop) };
 
 var reduce = function(state, pop) { return Array.avg(pop); };
 
-db.zipdata.mapReduce( map, reduce, { out: "zip_mapred" } );
+db.zipdata.mapReduce( map, reduce, { out: "zip_mapred" });
+
+db.zip_mapred.find()
 
 {
     "result" : "zip_mapred",
