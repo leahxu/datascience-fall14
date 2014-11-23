@@ -1,3 +1,4 @@
+Author: Leah Xu
 ===================== Storm: WordCountTopology.java
 
 /**
