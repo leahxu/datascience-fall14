@@ -16,9 +16,6 @@
  * limitations under the License.
  */
 
-
-//package org.umd.assignment.spout;
-
 package org.umd.assignment.spout;
 
 import java.util.Map;
@@ -46,146 +43,139 @@ import backtype.storm.utils.Utils;
 @SuppressWarnings("serial")
 public class TwitterSampleSpout extends BaseRichSpout {
 
-	SpoutOutputCollector _collector;
-	LinkedBlockingQueue<String> queue = null;
-	TwitterStream _twitterStream;
-	String consumerKey;
-	String consumerSecret;
-	String accessToken;
-	String accessTokenSecret;
-	String[] keyWords;
-	
-	public TwitterSampleSpout(String consumerKey, String consumerSecret,
-			String accessToken, String accessTokenSecret, String[] keyWords) {
-		this.consumerKey = consumerKey;
-		this.consumerSecret = consumerSecret;
-		this.accessToken = accessToken;
-		this.accessTokenSecret = accessTokenSecret;
-		this.keyWords = keyWords;
-	}
+  SpoutOutputCollector _collector;
+  LinkedBlockingQueue<String> queue = null;
+  TwitterStream _twitterStream;
+  String consumerKey;
+  String consumerSecret;
+  String accessToken;
+  String accessTokenSecret;
+  String[] keyWords;
+  
+  public TwitterSampleSpout(String consumerKey, String consumerSecret,
+      String accessToken, String accessTokenSecret, String[] keyWords) {
+    this.consumerKey = consumerKey;
+    this.consumerSecret = consumerSecret;
+    this.accessToken = accessToken;
+    this.accessTokenSecret = accessTokenSecret;
+    this.keyWords = keyWords;
+  }
 
 
-	//----------------------- Task 0 -----------------------------------------
-	//
-	//  Use the following link (for visual help) to create a Twitter App for yourselves. In summary,
-	//	the steps are:
-	//				(a) Go to apps.twitter.com
-	//				(b) Create an App [Put any website as an URL]
-	//				(c) Go to "keys and Access Token tab"
-	//				(d) Create you access token
-	//				(e) Copy over the ConsumerKey, consumerSecret, accesstoken, and accessTokenSecret
-	//				in the TwitterSampleSpout()
-	//
-	//	https://dev.twitter.com/oauth/overview/application-owner-access-tokens
-	//	
-	//
-	//
-	//------------------------------------------------------------------------
+  //----------------------- Task 0 -----------------------------------------
+  //
+  //  Use the following link (for visual help) to create a Twitter App for yourselves. In summary,
+  //  the steps are:
+  //        (a) Go to apps.twitter.com
+  //        (b) Create an App [Put any website as an URL]
+  //        (c) Go to "keys and Access Token tab"
+  //        (d) Create you access token
+  //        (e) Copy over the ConsumerKey, consumerSecret, accesstoken, and accessTokenSecret
+  //        in the TwitterSampleSpout()
+  //
+  //  https://dev.twitter.com/oauth/overview/application-owner-access-tokens
+  //  
+  //------------------------------------------------------------------------
 
-	public TwitterSampleSpout() {		
-		this.consumerKey = "aqMhHjo25IFTlQqmT3A1YNnPVs";
-		this.consumerSecret = "bdGjNYhusZSbzLQ6695veAJG9KtkBtAHYZwwLEnfGujqGz5j987";
-		this.accessToken = "c11412092-ks3eYiWAL8SKcTAJ3SMDdAkBJss7gOHMTk2YlwPFZ";
-		this.accessTokenSecret = "diDFa3JCYbgBv3D5MZei2xdHkGdZcDEqLGJcbNx7P5fKmv";
-		this.keyWords = new String[1];
-		this.keyWords[0] = "obama"; /* Filters All Tweets with word Obama */
-	}
+  public TwitterSampleSpout() {   
+    this.consumerKey = "C0PRjUbKOHaF0xp4NVfdMMJUe";
+    this.consumerSecret = "EjzUyYmZ7oBguADRqm5r2W1lI2grM4YZiVYcyTbmh2ZvnNE1K9";
+    this.accessToken = "2588753791-H8IxYCbhGZJQ6aI9zLGCzNGZh700fGLEfiVpGQt";
+    this.accessTokenSecret = "iz8J02XBBQQb1mHYxz08SWG82n4zwuqYNEdXbuEMIsOeB";
+    this.keyWords = new String[1];
+    this.keyWords[0] = "obama"; /* Filters All Tweets with word Obama */
+  }
 
-	@Override
-	public void open(Map conf, TopologyContext context,
-			SpoutOutputCollector collector) {
-		queue = new LinkedBlockingQueue<String>(1000);
-		_collector = collector;
+  @Override
+  public void open(Map conf, TopologyContext context,
+      SpoutOutputCollector collector) {
+    queue = new LinkedBlockingQueue<String>(1000);
+    _collector = collector;
 
-		StatusListener listener = new StatusListener() {
+    StatusListener listener = new StatusListener() {
 
-			@Override
-			public void onStatus(Status status) {
-			
-				queue.offer(status.getText());
-			}
+      @Override
+      public void onStatus(Status status) {
+        queue.offer(status.getText());
+      }
 
-			@Override
-			public void onDeletionNotice(StatusDeletionNotice sdn) {
-			}
+      @Override
+      public void onDeletionNotice(StatusDeletionNotice sdn) {
+      }
 
-			@Override
-			public void onTrackLimitationNotice(int i) {
-			}
+      @Override
+      public void onTrackLimitationNotice(int i) {
+      }
 
-			@Override
-			public void onScrubGeo(long l, long l1) {
-			}
+      @Override
+      public void onScrubGeo(long l, long l1) {
+      }
 
-			@Override
-			public void onException(Exception ex) {
-			}
+      @Override
+      public void onException(Exception ex) {
+      }
 
-			@Override
-			public void onStallWarning(StallWarning arg0) {
-				// TODO Auto-generated method stub
+      @Override
+      public void onStallWarning(StallWarning arg0) {
+      }
 
-			}
+    };
 
-		};
+    TwitterStreamFactory fact = new TwitterStreamFactory(
+        new ConfigurationBuilder().setJSONStoreEnabled(true).build());
 
-		TwitterStream twitterStream = new TwitterStreamFactory(
-				new ConfigurationBuilder().setJSONStoreEnabled(true).build())
-				.getInstance();
+    _twitterStream = fact.getInstance();
 
-		twitterStream.addListener(listener);
-		twitterStream.setOAuthConsumer(consumerKey, consumerSecret);
-		AccessToken token = new AccessToken(accessToken, accessTokenSecret);
-		twitterStream.setOAuthAccessToken(token);
-		
-		if (keyWords.length == 0) {
+    _twitterStream.addListener(listener);
+    _twitterStream.setOAuthConsumer(consumerKey, consumerSecret);
+    
+    AccessToken token = new AccessToken(accessToken, accessTokenSecret);
+    _twitterStream.setOAuthAccessToken(token);
+    
+    if (keyWords.length == 0) {
+      _twitterStream.sample();
+    } else {
+      FilterQuery query = new FilterQuery().track(keyWords);
+      _twitterStream.filter(query);
+    }
 
-			twitterStream.sample();
-		}
+  }
 
-		else {
+  @Override
+  public void nextTuple() {
+    String ret = queue.poll();
+    if (ret == null) {
+      Utils.sleep(50);
+    } else {
+         
+      _collector.emit(new Values(ret));
 
-			FilterQuery query = new FilterQuery().track(keyWords);
-			twitterStream.filter(query);
-		}
+    }
+  }
 
-	}
+  @Override
+  public void close() {
+    _twitterStream.shutdown();
+  }
 
-	@Override
-	public void nextTuple() {
-		String ret = queue.poll();
-		if (ret == null) {
-			Utils.sleep(50);
-		} else {
-		     
-			_collector.emit(new Values(ret));
+  @Override
+  public Map<String, Object> getComponentConfiguration() {
+    Config ret = new Config();
+    ret.setMaxTaskParallelism(1);
+    return ret;
+  }
 
-		}
-	}
+  @Override
+  public void ack(Object id) {
+  }
 
-	@Override
-	public void close() {
-		_twitterStream.shutdown();
-	}
+  @Override
+  public void fail(Object id) {
+  }
 
-	@Override
-	public Map<String, Object> getComponentConfiguration() {
-		Config ret = new Config();
-		ret.setMaxTaskParallelism(1);
-		return ret;
-	}
-
-	@Override
-	public void ack(Object id) {
-	}
-
-	@Override
-	public void fail(Object id) {
-	}
-
-	@Override
-	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("tweet"));
-	}
+  @Override
+  public void declareOutputFields(OutputFieldsDeclarer declarer) {
+    declarer.declare(new Fields("tweet"));
+  }
 
 }
